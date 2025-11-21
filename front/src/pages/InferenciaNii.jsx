@@ -314,6 +314,73 @@ export default function InferenciaNii() {
               informe metodológico.
             </p>
           </section>
+                  {/* EJEMPLO Y RECOMENDACIONES PARA ARCHIVOS NIFTI */}
+        <section className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 space-y-4">
+          <h2 className="text-sm font-semibold text-slate-900">
+            Ejemplo y recomendaciones para los archivos de entrada{" "}
+            <code className="bg-slate-100 px-1 rounded text-[11px]">.nii</code>
+          </h2>
+
+          <p className="text-xs text-slate-600">
+            El modelo espera dos volúmenes NIfTI: la{" "}
+            <strong>imagen T1 estructural</strong> y su{" "}
+            <strong>máscara binaria</strong> asociada. Ambos archivos deben
+            provenir del mismo paciente y estar alineados espacialmente
+            (mismas dimensiones, resolución y sistema de coordenadas).
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-slate-800">
+                Ejemplo de archivo de imagen T1
+              </p>
+              <pre
+                className="text-[11px] leading-relaxed rounded-xl p-3 overflow-x-auto text-slate-50"
+                style={{ backgroundColor: "#0f172a" }}
+              >{`t1_paciente_29.nii
+t1_paciente_105.nii
+t1_paciente_210.nii`}</pre>
+              <ul className="text-[11px] text-slate-500 space-y-1 list-disc list-inside">
+                <li>Formato volumétrico NIfTI (*.nii o *.nii.gz*).</li>
+                <li>Imagen T1 ya preprocesada según el protocolo del estudio.</li>
+                <li>Sin datos de identificación personal en el nombre ni en el header.</li>
+              </ul>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-slate-800">
+                Ejemplo de archivo de máscara
+              </p>
+              <pre
+                className="text-[11px] leading-relaxed rounded-xl p-3 overflow-x-auto text-slate-50"
+                style={{ backgroundColor: "#0f172a" }}
+              >{`mask_paciente_29.nii
+mask_paciente_105.nii
+mask_paciente_210.nii`}</pre>
+              <ul className="text-[11px] text-slate-500 space-y-1 list-disc list-inside">
+                <li>Volumen binario (0 = fuera de la región, 1 = región de interés).</li>
+                <li>
+                  Misma geometría que la imagen T1: mismas dimensiones,
+                  voxel size y orientación.
+                </li>
+                <li>
+                  Generada a partir del pipeline de segmentación definido en el
+                  proyecto (no dibujada manualmente en esta interfaz).
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <p className="text-[11px] text-slate-500 leading-relaxed">
+            Estos archivos se utilizan exclusivamente con fines{" "}
+            <strong>metodológicos y de investigación</strong> en el contexto
+            del proyecto de grado. La interfaz no modifica las imágenes
+            originales ni almacena de forma persistente los volúmenes
+            cargados; únicamente extrae las características radiómicas necesarias
+            para alimentar el clasificador.
+          </p>
+        </section>
+
         )}
       </div>
     </div>
