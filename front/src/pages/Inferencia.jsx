@@ -220,20 +220,28 @@ export default function Inferencia() {
                   </span>
                 </p>
 
-                {probabilityRef !== null && (
-                  <div className="space-y-1">
-                    <p className="text-sm text-slate-700">
-                      <span className="font-semibold">Probabilidad REF: </span>
-                      {(probabilityRef * 100).toFixed(1)}%
-                    </p>
-                    <p className="text-[11px] text-slate-500">
-                      Este valor refleja la probabilidad estimada por el modelo
-                      de pertenecer al grupo de referencia definido en el
-                      entrenamiento (por ejemplo, MMC vs Control). No debe
-                      interpretarse como un riesgo clínico individual.
-                    </p>
-                  </div>
-                )}
+                {/* Probabilidades MMC / Control */}
+{result && result.probability_mmc != null && result.probability_control != null && (
+  <div className="space-y-1">
+    <p className="text-sm text-slate-700">
+      <span className="font-semibold">Probabilidad MMC: </span>
+      {(Number(result.probability_mmc) * 100).toFixed(1)}%
+    </p>
+
+    <p className="text-sm text-slate-700">
+      <span className="font-semibold">Probabilidad Control: </span>
+      {(Number(result.probability_control) * 100).toFixed(1)}%
+    </p>
+
+    <p className="text-[11px] text-slate-500">
+      Estas probabilidades reflejan la estimación del modelo radiomics T1
+      sobre la pertenencia del paciente a cada grupo (MMC o Control).
+      No constituyen riesgo clínico individual y su uso es estrictamente
+      exploratorio en el marco del proyecto.
+    </p>
+  </div>
+)}
+
 
                 <p className="text-[11px] text-slate-500">
                   <span className="font-semibold">Modelo:</span>{" "}
