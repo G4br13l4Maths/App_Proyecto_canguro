@@ -13,70 +13,74 @@ export default function Home() {
             Panel de resultados · Método Madre Canguro
           </h1>
           <p className="text-sm md:text-[15px] text-slate-600 leading-relaxed max-w-3xl">
-            En esta página se presentan de forma resumida los resultados principales del estudio a
-            20 años: descripción de la cohorte, comparación entre grupos (MMC vs controles y REF) y
-            patrones identificados mediante clustering y análisis estadístico sobre las estructuras
-            cerebrales y los desenlaces clínicos.
+            En esta página se resumen los principales resultados estructurales del seguimiento a
+            20 años: submuestras analizadas, comparación entre grupos (MMC vs controles) y patrones
+            identificados mediante clustering, modelos supervisados y análisis estadístico sobre
+            distintas estructuras cerebrales.
           </p>
         </section>
 
-        {/* 🔹 Tarjetas de KPIs principales */}
+        {/* 🔹 Tarjetas de KPIs principales (valores reales por submuestra) */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* KPI 1 */}
           <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
             <span className="text-[11px] uppercase tracking-[0.16em] text-slate-500">
-              Total participantes
+              MRI T1 tras QC
             </span>
-            <span className="text-2xl font-semibold text-slate-900">400</span>
+            <span className="text-2xl font-semibold text-slate-900">215</span>
             <span className="text-[11px] text-slate-500">
-              Cohorte original incluida en el seguimiento a 20 años.
+              Sujetos con resonancia estructural T1 apta para análisis morfométrico a 20 años.
             </span>
           </div>
 
           {/* KPI 2 */}
           <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
             <span className="text-[11px] uppercase tracking-[0.16em] text-slate-500">
-              Grupo MMC
+              FreeSurfer · corteza visual
             </span>
-            <span className="text-2xl font-semibold text-slate-900">200</span>
+            <span className="text-2xl font-semibold text-slate-900">185</span>
             <span className="text-[11px] text-slate-500">
-              Participantes en los que se implementó el Método Madre Canguro.
+              Participantes con tablas .stats completas y covariables clínicas no faltantes
+              incluidos en los modelos ajustados.
             </span>
           </div>
 
           {/* KPI 3 */}
           <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
             <span className="text-[11px] uppercase tracking-[0.16em] text-slate-500">
-              Grupo Control + REF
+              Slices cuerpo calloso
             </span>
-            <span className="text-2xl font-semibold text-slate-900">200</span>
+            <span className="text-2xl font-semibold text-slate-900">156</span>
             <span className="text-[11px] text-slate-500">
-              Participantes manejados con cuidado convencional o cuidado de referencia.
+              Sujetos (84 MMC, 72 control) con imágenes segmentadas del cuerpo calloso usadas en el
+              clustering.
             </span>
           </div>
 
           {/* KPI 4 */}
           <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
             <span className="text-[11px] uppercase tracking-[0.16em] text-slate-500">
-              Tiempo de seguimiento
+              Radiomics T1
             </span>
-            <span className="text-2xl font-semibold text-slate-900">20 años</span>
+            <span className="text-2xl font-semibold text-slate-900">151</span>
             <span className="text-[11px] text-slate-500">
-              Evaluación estructural y funcional en la adultez temprana.
+              Participantes (83 MMC, 68 control) incluidos en el modelo supervisado basado en
+              descriptores radiológicos T1.
             </span>
           </div>
         </section>
 
-        {/* 🔹 Distribución de la cohorte por grupo */}
+        {/* 🔹 Distribución de la cohorte por grupo (ejemplo radiomics T1) */}
         <section className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 space-y-4">
           <div className="flex flex-col gap-1">
             <h2 className="text-sm font-semibold text-slate-900">
-              Distribución de la cohorte por grupo
+              Distribución por grupo · submuestra radiomics T1
             </h2>
             <p className="text-xs text-slate-600 max-w-3xl">
-              Este gráfico resume la proporción de participantes en cada grupo de estudio. Por ahora
-              se muestran valores de ejemplo; en la versión final se reemplazarán con los
-              porcentajes calculados a partir de la base de datos consolidada.
+              Esta visualización resume la proporción de participantes MMC y control en la
+              submuestra utilizada para el modelo radiomics T1 (83 MMC y 68 controles). La
+              distribución exacta puede variar entre los distintos análisis del pipeline
+              (FreeSurfer, clustering y pruebas neuropsicológicas).
             </p>
           </div>
 
@@ -86,12 +90,12 @@ export default function Home() {
             <div className="space-y-1">
               <div className="flex items-baseline justify-between">
                 <span className="text-xs font-medium text-slate-700">MMC</span>
-                <span className="text-xs text-slate-500">50%</span>
+                <span className="text-xs text-slate-500">55%</span>
               </div>
               <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
                 <div
                   className="h-full rounded-full"
-                  style={{ width: "50%", backgroundColor: KMC_BLUE }}
+                  style={{ width: "55%", backgroundColor: KMC_BLUE }}
                 />
               </div>
             </div>
@@ -100,10 +104,10 @@ export default function Home() {
             <div className="space-y-1">
               <div className="flex items-baseline justify-between">
                 <span className="text-xs font-medium text-slate-700">Control</span>
-                <span className="text-xs text-slate-500">30%</span>
+                <span className="text-xs text-slate-500">45%</span>
               </div>
               <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
-                <div className="h-full rounded-full bg-slate-400" style={{ width: "30%" }} />
+                <div className="h-full rounded-full bg-slate-400" style={{ width: "45%" }} />
               </div>
             </div>
 
@@ -111,33 +115,32 @@ export default function Home() {
             <div className="space-y-1">
               <div className="flex items-baseline justify-between">
                 <span className="text-xs font-medium text-slate-700">REF</span>
-                <span className="text-xs text-slate-500">20%</span>
+                <span className="text-xs text-slate-500">0%</span>
               </div>
               <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
-                <div className="h-full rounded-full bg-slate-300" style={{ width: "20%" }} />
+                <div className="h-full rounded-full bg-slate-300" style={{ width: "0%" }} />
               </div>
             </div>
           </div>
 
           <p className="text-[11px] text-slate-500 leading-relaxed">
-            En el informe escrito se detalla cómo se definieron estos grupos, los criterios de
-            inclusión y las diferencias en el seguimiento clínico entre el Método Madre Canguro, el
-            cuidado convencional (Control) y el cuidado de referencia (REF).
+            En el informe escrito se documenta la composición de cada submuestra (MRI T1,
+            FreeSurfer, radiomics y pruebas neuropsicológicas), así como los criterios de inclusión
+            y las diferencias entre participantes MMC y controles.
           </p>
         </section>
 
-        {/* 🔹 Clustering exploratorio en cuerpo calloso (FreeSurfer) */}
+        {/* 🔹 Clustering exploratorio en cuerpo calloso (FreeSurfer / slices) */}
         <section className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 space-y-5">
           <div className="flex flex-col gap-1">
             <h2 className="text-sm font-semibold text-slate-900">
               Clustering exploratorio en cuerpo calloso
             </h2>
             <p className="text-xs text-slate-600 max-w-3xl">
-              A partir de las métricas estructurales del cuerpo calloso obtenidas con FreeSurfer se
-              aplicaron métodos de clustering para identificar patrones latentes en la cohorte, sin
-              usar la etiqueta de grupo (MMC vs Control) durante el entrenamiento. La figura muestra
-              la distribución de los sujetos en un espacio de características reducido, coloreados
-              según el clúster asignado.
+              El análisis se realizó sobre 156 participantes (84 MMC, 72 controles) con imágenes de
+              slices del cuerpo calloso segmentadas y procesadas. A partir de representaciones
+              latentes aprendidas mediante un autoencoder 3D se aplicó K-means para identificar
+              patrones estructurales sin usar la etiqueta de grupo durante el entrenamiento.
             </p>
           </div>
 
@@ -146,7 +149,7 @@ export default function Home() {
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 flex items-center justify-center">
               <img
                 src="/images/clustering_cuerpo_calloso.png"
-                alt="Dispersión de sujetos en el espacio de características, coloreados por clúster K-means, con índice de silueta aproximado de 0.57."
+                alt="Dispersión de sujetos en el espacio de características latentes del cuerpo calloso, coloreados por clúster K-means."
                 className="max-h-80 w-auto object-contain rounded-md"
               />
             </div>
@@ -160,27 +163,31 @@ export default function Home() {
                 <p className="text-xs text-slate-600">
                   El modelo K-means con dos clústeres alcanzó un índice de silueta cercano a{" "}
                   <span className="font-semibold">0.57</span>, lo que indica una separación
-                  moderada entre grupos latentes en las métricas del cuerpo calloso.
+                  moderada entre patrones latentes en las métricas del cuerpo calloso.
                 </p>
                 <ul className="text-xs text-slate-600 list-disc list-inside space-y-0.5">
-                  <li>Se observan dos grupos relativamente compactos en el espacio reducido.</li>
                   <li>
-                    Algunos puntos se ubican en zonas intermedias, reflejando solapamiento entre
-                    los patrones estructurales.
+                    En el <span className="font-semibold">clúster 0</span>, aproximadamente el 64%
+                    de los sujetos pertenece al grupo MMC y el 36% al grupo control.
                   </li>
                   <li>
-                    El análisis es completamente no supervisado; las etiquetas clínicas se utilizan
-                    solo en la etapa de interpretación para comparar la distribución de MMC y
-                    controles en cada clúster.
+                    En el <span className="font-semibold">clúster 1</span> se observa una
+                    distribución más equilibrada, con ligera tendencia hacia controles (≈56%
+                    control, 44% MMC).
+                  </li>
+                  <li>
+                    El análisis es no supervisado; las etiquetas clínicas se utilizan únicamente en
+                    la etapa de interpretación para comparar la distribución de MMC y controles en
+                    cada clúster.
                   </li>
                 </ul>
               </div>
 
               <p className="text-[11px] text-slate-500 leading-relaxed">
-                Estos resultados son exploratorios y no permiten una separación perfecta entre MMC
-                y controles, pero apoyan la hipótesis de que el Método Madre Canguro deja huellas
-                sutiles en la organización estructural de la sustancia blanca que pueden ser
-                aprovechadas en modelos predictivos más avanzados.
+                Los resultados sugieren que el cuerpo calloso contiene huellas estructurales sutiles
+                asociadas al tipo de cuidado neonatal temprano. Aunque existe solapamiento entre
+                grupos, la organización latente tiende a diferenciar, de forma parcial, a pacientes
+                MMC de controles.
               </p>
             </div>
           </div>
@@ -194,9 +201,10 @@ export default function Home() {
             </h2>
             <p className="text-xs text-slate-600 max-w-3xl">
               A partir de las segmentaciones automáticas de FreeSurfer se analizaron métricas de
-              grosor cortical y volumen gris en regiones occipitales y temporales (corteza
-              pericalcarina, cuneus, lingual, lateral occipital y fusiforme), comparando
-              participantes con Método Madre Canguro (MMC) y controles.
+              grosor cortical, área y volumen gris en regiones occipitales y temporales
+              (pericalcarina, cuneus, lingual, lateral occipital y fusiforme). La submuestra incluyó{" "}
+              <span className="font-semibold">185 participantes</span> (105 MMC y 80 controles) con
+              tablas .stats completas y covariables clínicas disponibles.
             </p>
           </div>
 
@@ -205,7 +213,7 @@ export default function Home() {
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 flex items-center justify-center">
               <img
                 src="/images/freesurfer_corteza_visual.png"
-                alt="Mapa de efectos β MMC vs Control en corteza visual (ThickAvg, SurfArea, GrayVol, GrayVol/eTIV) estimados con modelos OLS."
+                alt="Mapa de efectos MMC vs Control en corteza visual (ThickAvg, SurfArea, GrayVol y GrayVol/eTIV) estimados con modelos OLS."
                 className="max-h-80 w-auto object-contain rounded-md"
               />
             </div>
@@ -218,15 +226,14 @@ export default function Home() {
                 </h3>
                 <ul className="text-xs text-slate-600 list-disc list-inside space-y-0.5">
                   <li>
-                    Regiones: pericalcarina, cuneus, lingual, lateral occipital, fusiforme.
+                    Regiones: pericalcarina, cuneus, lingual, lateral occipital y fusiforme.
                   </li>
                   <li>
                     Métricas: grosor medio (ThickAvg), área de superficie (SurfArea), volumen gris
                     (GrayVol) y volumen gris normalizado (GrayVol/eTIV).
                   </li>
                   <li>
-                    Modelos ajustados por eTIV, sexo, edad gestacional y otras covariables
-                    clínicas.
+                    Modelos ajustados por eTIV, sexo, edad gestacional y otras covariables clínicas.
                   </li>
                 </ul>
               </div>
@@ -234,18 +241,20 @@ export default function Home() {
               <div className="space-y-1">
                 <h3 className="text-xs font-semibold text-slate-900">Tendencias preliminares</h3>
                 <p className="text-xs text-slate-600">
-                  Se observan <span className="font-semibold">tendencias a mayores valores de grosor,
-                  volumen y área</span> en algunas regiones de la corteza visual en el grupo MMC
-                  frente a los controles, especialmente en cuneus y zonas pericalcarinas. Estas
-                  diferencias son sutiles y de tamaño de efecto moderado, por lo que requieren
-                  validación con muestras más grandes.
+                  Se observan{" "}
+                  <span className="font-semibold">
+                    tendencias a mayores valores de grosor, volumen y área
+                  </span>{" "}
+                  en algunas regiones de la corteza visual en el grupo MMC frente a los controles,
+                  especialmente en cuneus y zonas pericalcarinas. Las diferencias son sutiles, de
+                  tamaño de efecto moderado, y requieren validación en muestras más amplias.
                 </p>
               </div>
 
               <p className="text-[11px] text-slate-500 leading-relaxed">
-                Esta sección resume de forma visual los análisis estructurales con FreeSurfer que se
-                detallan en el informe escrito. La interpretación de estos hallazgos se hace siempre
-                en conjunto con los desenlaces clínicos y neuropsicológicos del estudio.
+                Esta sección resume de forma visual los análisis estructurales con FreeSurfer
+                detallados en el informe escrito. La interpretación de estos hallazgos se hace
+                siempre en conjunto con los desenlaces clínicos y neuropsicológicos del estudio.
               </p>
             </div>
           </div>
@@ -259,8 +268,10 @@ export default function Home() {
             </h2>
             <p className="text-xs text-slate-600 max-w-3xl">
               Siguiendo la propuesta de Wagner et al. (Scientific Reports, 2022), se implementó un
-              pipeline supervisado para predecir pertenencia al grupo MMC o Control a partir de
-              descriptores radiológicos cuantitativos extraídos de imágenes T1.
+              pipeline supervisado para predecir pertenencia al grupo MMC o control a partir de
+              descriptores radiológicos cuantitativos extraídos de imágenes T1. La submuestra de
+              trabajo incluyó <span className="font-semibold">151 participantes</span> (83 MMC y 68
+              controles).
             </p>
           </div>
 
@@ -295,7 +306,8 @@ export default function Home() {
                   El modelo radiomics T1 alcanza un AUC aproximado de{" "}
                   <span className="font-semibold">0.64</span> para distinguir entre pacientes MMC y
                   controles, por encima del clasificador aleatorio (línea diagonal). Esto indica una
-                  capacidad de discriminación moderada, coherente con el tamaño muestral actual.
+                  capacidad de discriminación moderada, coherente con el tamaño muestral actual y
+                  con la sutileza de las diferencias estructurales.
                 </p>
               </div>
             </div>
@@ -309,31 +321,30 @@ export default function Home() {
           </h2>
           <ul className="text-xs text-slate-600 list-disc list-inside space-y-1.5">
             <li>
-              A pesar de partir de una cohorte de{" "}
-              <span className="font-semibold">alto riesgo biológico</span>, los participantes con
-              Método Madre Canguro (MMC) muestran{" "}
+              Los participantes que recibieron el{" "}
+              <span className="font-semibold">Método Madre Canguro</span> muestran{" "}
               <span className="font-semibold">tendencias estructurales favorables</span> en corteza
-              visual (mayor grosor, volumen y área relativa en regiones como cuneus y corteza
-              pericalcarina).
+              visual (mayor grosor, volumen y área relativa en cuneus y corteza pericalcarina),
+              después de ajustar por eTIV y covariables clínicas.
             </li>
             <li>
               El <span className="font-semibold">clustering del cuerpo calloso</span> revela
-              patrones latentes en la organización estructural que, aunque presentan solapamiento,
-              tienden a agrupar de forma diferencial a MMC y controles, sugiriendo huellas sutiles
-              del tipo de cuidado neonatal en la arquitectura de la sustancia blanca.
+              patrones latentes en la organización de la sustancia blanca que, aunque presentan
+              solapamiento, tienden a agrupar de forma diferencial a MMC y controles, sugiriendo
+              huellas sutiles del tipo de cuidado neonatal.
             </li>
             <li>
               Los modelos supervisados basados en{" "}
               <span className="font-semibold">radiomics T1</span> alcanzan un desempeño moderado
-              (AUC ≈ 0.64) para distinguir MMC de controles, lo que indica que los descriptores
-              cuantitativos de imagen contienen información relevante, pero aún insuficiente para
-              uso clínico individual.
+              (AUC ≈ 0.64) para distinguir MMC de controles, indicando que los descriptores de
+              imagen contienen información relevante, pero aún insuficiente para uso clínico
+              individual.
             </li>
             <li>
-              En conjunto, los resultados apoyan la hipótesis de que el Método Madre Canguro puede
-              tener un <span className="font-semibold">impacto estructural de largo plazo</span> sobre
-              el cerebro en la adultez temprana, que se refleja en métricas morfométricas y
-              radiológicas y merece ser profundizado en futuras fases del proyecto.
+              En conjunto, los hallazgos apoyan la hipótesis de que el Método Madre Canguro puede
+              tener un <span className="font-semibold">impacto estructural de largo plazo</span>
+              sobre el cerebro en la adultez temprana, coherente con la evidencia clínica y
+              neuropsicológica del proyecto.
             </li>
           </ul>
         </section>
