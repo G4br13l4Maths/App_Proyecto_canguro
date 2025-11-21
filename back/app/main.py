@@ -24,9 +24,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Ruta del modelo ya copiado a back/models/elasticnet.pkl
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "elasticnet.pkl")
+# Ruta del modelo ya copiado a back/app/models/elasticnet.pkl
+BASE_DIR = os.path.dirname(__file__)  # /app/app en Railway
+MODEL_PATH = os.path.join(BASE_DIR, "models", "elasticnet.pkl")
 _model = None
+
 
 # === FEATURES QUE ESPERA EL MODELO (42 radiomics) ===
 RADIOMICS_FEATURES: List[str] = [
