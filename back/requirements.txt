@@ -7,3 +7,7 @@ pandas
 scikit-learn
 joblib
 python-multipart
+
+pyradiomics
+SimpleITK
+
