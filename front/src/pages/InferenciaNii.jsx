@@ -112,7 +112,8 @@ export default function InferenciaNii() {
             <p className="text-xs text-slate-600">
               Selecciona la <strong>imagen T1</strong> y la{" "}
               <strong>máscara correspondiente</strong>, ambas en formato NIfTI
-              (<code className="bg-slate-100 px-1 rounded text-[11px]">
+              (
+              <code className="bg-slate-100 px-1 rounded text-[11px]">
                 .nii / .nii.gz
               </code>
               ). El backend se encarga de extraer las características mediante
@@ -120,10 +121,7 @@ export default function InferenciaNii() {
             </p>
           </div>
 
-          <form
-            onSubmit={onSubmit}
-            className="flex flex-col gap-3"
-          >
+          <form onSubmit={onSubmit} className="flex flex-col gap-3">
             <div className="flex flex-col md:flex-row md:items-center gap-3">
               <div className="flex-1">
                 <label className="block text-xs font-medium text-slate-700 mb-1">
@@ -132,9 +130,7 @@ export default function InferenciaNii() {
                 <input
                   type="file"
                   accept=".nii,.nii.gz"
-                  onChange={(e) =>
-                    setImageFile(e.target.files?.[0] || null)
-                  }
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                   className="block w-full text-sm text-slate-700
                              file:mr-3 file:py-2 file:px-4
                              file:rounded-xl file:border-0
@@ -159,9 +155,7 @@ export default function InferenciaNii() {
                 <input
                   type="file"
                   accept=".nii,.nii.gz"
-                  onChange={(e) =>
-                    setMaskFile(e.target.files?.[0] || null)
-                  }
+                  onChange={(e) => setMaskFile(e.target.files?.[0] || null)}
                   className="block w-full text-sm text-slate-700
                              file:mr-3 file:py-2 file:px-4
                              file:rounded-xl file:border-0
@@ -242,7 +236,6 @@ export default function InferenciaNii() {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-4">
-              {/* Bloque principal con clase y probabilidad */}
               <div className="space-y-3">
                 <p className="text-sm text-slate-700">
                   <span className="font-semibold">Clase predicha: </span>
@@ -280,7 +273,6 @@ export default function InferenciaNii() {
                 </p>
               </div>
 
-              {/* Recuadro de interpretación */}
               <div className="rounded-xl bg-slate-50 border border-slate-200 p-3 text-[11px] text-slate-600 space-y-1.5">
                 <p className="font-semibold text-slate-800">
                   ¿Cómo interpretar este resultado?
@@ -314,7 +306,9 @@ export default function InferenciaNii() {
               informe metodológico.
             </p>
           </section>
-                  {/* EJEMPLO Y RECOMENDACIONES PARA ARCHIVOS NIFTI */}
+        )}
+
+        {/* EJEMPLO Y RECOMENDACIONES PARA ARCHIVOS NIFTI */}
         <section className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 space-y-4">
           <h2 className="text-sm font-semibold text-slate-900">
             Ejemplo y recomendaciones para los archivos de entrada{" "}
@@ -343,7 +337,10 @@ t1_paciente_210.nii`}</pre>
               <ul className="text-[11px] text-slate-500 space-y-1 list-disc list-inside">
                 <li>Formato volumétrico NIfTI (*.nii o *.nii.gz*).</li>
                 <li>Imagen T1 ya preprocesada según el protocolo del estudio.</li>
-                <li>Sin datos de identificación personal en el nombre ni en el header.</li>
+                <li>
+                  Sin datos de identificación personal en el nombre ni en el
+                  header.
+                </li>
               </ul>
             </div>
 
@@ -360,8 +357,8 @@ mask_paciente_210.nii`}</pre>
               <ul className="text-[11px] text-slate-500 space-y-1 list-disc list-inside">
                 <li>Volumen binario (0 = fuera de la región, 1 = región de interés).</li>
                 <li>
-                  Misma geometría que la imagen T1: mismas dimensiones,
-                  voxel size y orientación.
+                  Misma geometría que la imagen T1: mismas dimensiones, voxel
+                  size y orientación.
                 </li>
                 <li>
                   Generada a partir del pipeline de segmentación definido en el
@@ -373,15 +370,13 @@ mask_paciente_210.nii`}</pre>
 
           <p className="text-[11px] text-slate-500 leading-relaxed">
             Estos archivos se utilizan exclusivamente con fines{" "}
-            <strong>metodológicos y de investigación</strong> en el contexto
-            del proyecto de grado. La interfaz no modifica las imágenes
-            originales ni almacena de forma persistente los volúmenes
-            cargados; únicamente extrae las características radiómicas necesarias
-            para alimentar el clasificador.
+            <strong>metodológicos y de investigación</strong> en el contexto del
+            proyecto de grado. La interfaz no modifica las imágenes originales
+            ni almacena de forma persistente los volúmenes cargados; únicamente
+            extrae las características radiómicas necesarias para alimentar el
+            clasificador.
           </p>
         </section>
-
-        )}
       </div>
     </div>
   );
