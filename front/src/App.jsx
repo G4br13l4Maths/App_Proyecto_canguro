@@ -1,7 +1,7 @@
 import { Routes, Route, NavLink } from "react-router-dom";
 import Home from "./pages/Home";
 import Inferencia from "./pages/Inferencia";
-import InferenciaNii from "./pages/InferenciaNii";
+// import InferenciaNii from "./pages/InferenciaNii";
 import "./App.css"; // si no tienes App.css, puedes borrar esta línea
 
 const KMC_BLUE = "#2e75b6";
@@ -42,9 +42,6 @@ function App() {
             <NavLink to="/inferencia" className={navLinkClasses}>
               Inferencia
             </NavLink>
-            <NavLink to="/inferencia-nii" className={navLinkClasses}>
-              Inferencia NIfTI
-            </NavLink>
           </nav>
         </div>
       </header>
@@ -54,7 +51,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/inferencia" element={<Inferencia />} />
-          <Route path="/inferencia-nii" element={<InferenciaNii />} />
         </Routes>
       </main>
     </div>
