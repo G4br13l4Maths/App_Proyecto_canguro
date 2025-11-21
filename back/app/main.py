@@ -4,6 +4,7 @@ from typing import Dict, List
 import numpy as np
 import os
 import joblib
+import tempfile # NUEVO 
 
 app = FastAPI(title="KMC Inference API (Radiomics)")
 
@@ -66,6 +67,23 @@ RADIOMICS_FEATURES: List[str] = [
     "original_glcm_SumSquares",
 ]
 
+##### NUEVO
+def extract_radiomics_from_nii(nii_path: str, mask_path: str) -> Dict[str, float]:
+    """
+    PLANTILLA:
+    Esta función será reemplazada con el pipeline real de William.
+    Debería:
+      - Cargar la imagen T1 (.nii / .nii.gz) y la máscara,
+      - Calcular las 42 características definidas en RADIOMICS_FEATURES,
+      - Devolver un dict {nombre_feature: valor_float}.
+
+    Por ahora, devuelve todas las features en 0.0 SOLO para probar el flujo
+    end-to-end sin romper nada.
+    """
+    features: Dict[str, float] = {feat: 0.0 for feat in RADIOMICS_FEATURES}
+    return features
+
+
 def parse_kv_text(text: str) -> Dict[str, str]:
     """
     Parsea un archivo .txt en formato:
@@ -127,6 +145,7 @@ def load_model():
         _model = joblib.load(MODEL_PATH)
     return _model
 
+####### DEFINING ENDPOINTS ########
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
@@ -171,3 +190,74 @@ async def predict(file: UploadFile = File(...)):
         "raw_class_int": pred_int,
         "model_type": "radiomics_elasticnet_logreg",
     }
+
+    ###### NUEVO
+    @app.post("/predict_from_nii")
+async def predict_from_nii(
+    image: UploadFile = File(..., description="Archivo .nii de la imagen T1"),
+    mask: UploadFile = File(..., description="Archivo .nii de la máscara"),
+):
+    """
+    Endpoint alterno de inferencia:
+    - Recibe imagen T1 (.nii/.nii.gz) y su máscara.
+    - Extrae las 42 características radiomics.
+    - Reutiliza el mismo modelo elasticnet.pkl.
+    """
+
+    valid_exts = (".nii", ".nii.gz")
+
+    # 1) Validar extensiones
+    if not image.filename.endswith(valid_exts):
+        raise HTTPException(
+            status_code=400,
+            detail="El archivo de imagen debe ser .nii o .nii.gz",
+        )
+    if not mask.filename.endswith(valid_exts):
+        raise HTTPException(
+            status_code=400,
+            detail="El archivo de máscara debe ser .nii o .nii.gz",
+        )
+
+    # 2) Guardar archivos temporalmente en disco
+    with tempfile.TemporaryDirectory() as tmpdir:
+        image_path = os.path.join(tmpdir, image.filename)
+        mask_path = os.path.join(tmpdir, mask.filename)
+
+        with open(image_path, "wb") as f:
+            f.write(await image.read())
+        with open(mask_path, "wb") as f:
+            f.write(await mask.read())
+
+        # 3) Extraer features numéricas desde .nii + máscara
+        numeric_features = extract_radiomics_from_nii(image_path, mask_path)
+
+        # 4) Convertir a dict de strings para reutilizar vectorize_radiomics
+        sample_str: Dict[str, str] = {
+            k: str(numeric_features[k]) for k in RADIOMICS_FEATURES
+        }
+
+        # 5) Vectorizar igual que con el .txt
+        X = vectorize_radiomics(sample_str)
+
+        # 6) Cargar modelo y hacer inferencia
+        model = load_model()
+        try:
+            proba_ref = None
+            if hasattr(model, "predict_proba"):
+                proba_ref = float(model.predict_proba(X)[0, 1])
+            pred_int = int(model.predict(X)[0])
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error de inferencia en el modelo: {e}",
+            )
+
+    predicted_class = "REF" if pred_int == 1 else "MMC_or_Control"
+
+    return {
+        "predicted_class": predicted_class,
+        "probability_ref": round(proba_ref, 3) if proba_ref is not None else None,
+        "raw_class_int": pred_int,
+        "model_type": "radiomics_elasticnet_logreg_from_nii",
+    }
+
