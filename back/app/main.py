@@ -191,8 +191,8 @@ async def predict(file: UploadFile = File(...)):
         "model_type": "radiomics_elasticnet_logreg",
     }
 
-    ###### NUEVO
-    @app.post("/predict_from_nii")
+###### NUEVO
+@app.post("/predict_from_nii")
 async def predict_from_nii(
     image: UploadFile = File(..., description="Archivo .nii de la imagen T1"),
     mask: UploadFile = File(..., description="Archivo .nii de la máscara"),
