@@ -25,7 +25,7 @@ export default function Home() {
           {/* KPI 1 */}
           <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-4 flex flex-col gap-1">
             <span className="text-[11px] uppercase tracking-[0.16em] text-slate-500">
-              MRI T1 tras QC
+              Resonancias T1 tras QC
             </span>
             <span className="text-2xl font-semibold text-slate-900">215</span>
             <span className="text-[11px] text-slate-500">
