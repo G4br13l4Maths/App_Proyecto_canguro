@@ -20,6 +20,12 @@ export default function Inferencia() {
 
   const apiBase = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
+  // Probabilidad numérica (0–1) de la clase REF, si existe
+  const probabilityRef =
+    result && result.probability_ref != null
+      ? Number(result.probability_ref)
+      : null;
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -54,12 +60,27 @@ export default function Inferencia() {
     }
   };
 
+  // 🔹 Paso 2: descargar resultado en .json
+  const handleDownloadJson = () => {
+    if (!result) return;
+    const blob = new Blob([JSON.stringify(result, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `kmc_inferencia_${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="h-1.5 w-full" style={{ backgroundColor: KMC_BLUE }} />
 
       <div className="max-w-4xl mx-auto px-4 py-10 space-y-8">
-
         {/* ENCABEZADO */}
         <header className="space-y-3">
           <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 shadow-sm border border-slate-200">
@@ -93,7 +114,7 @@ export default function Inferencia() {
           </h2>
 
           <p className="text-xs text-slate-600">
-            El archivo debe contener **42 variables** en formato{" "}
+            El archivo debe contener 42 variables en formato{" "}
             <code className="bg-slate-100 px-1 rounded text-[11px]">
               clave=valor
             </code>{" "}
@@ -152,16 +173,27 @@ export default function Inferencia() {
         {/* RESULTADO */}
         {result && (
           <section className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 space-y-5">
-            <h2 className="text-sm font-semibold text-slate-900">
-              2. Resultado de la inferencia
-            </h2>
+            {/* Título + botón de descarga JSON */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <h2 className="text-sm font-semibold text-slate-900">
+                2. Resultado de la inferencia
+              </h2>
+
+              <button
+                type="button"
+                onClick={handleDownloadJson}
+                className="inline-flex items-center justify-center px-3 py-1.5 rounded-xl
+                           text-[11px] font-medium border border-slate-300
+                           text-slate-700 bg-white hover:bg-slate-50 shadow-sm"
+              >
+                Descargar resultado (.json)
+              </button>
+            </div>
 
             {/* GRID PRINCIPAL */}
             <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-6">
-
               {/* BLOQUE IZQUIERDO */}
               <div className="space-y-3">
-
                 {/* Clase predicha */}
                 <p className="text-sm text-slate-700">
                   <span className="font-semibold">Clase predicha: </span>
@@ -173,18 +205,32 @@ export default function Inferencia() {
                   </span>
                 </p>
 
-                {/* Probabilidad REF */}
-                {result.probability_ref != null && (
+                {/* Probabilidad REF + barra visual */}
+                {probabilityRef !== null && (
                   <div className="space-y-1">
                     <p className="text-sm text-slate-700">
-                      <span className="font-semibold">Probabilidad (clase REF): </span>
-                      {(Number(result.probability_ref) * 100).toFixed(1)}%
+                      <span className="font-semibold">
+                        Probabilidad (clase REF):
+                      </span>{" "}
+                      {(probabilityRef * 100).toFixed(1)}%
                     </p>
 
-                    <p className="text-[11px] text-slate-500">
-                      Esta probabilidad corresponde a la clase de referencia
-                      utilizada en el entrenamiento del modelo (REF). No debe
-                      interpretarse como un riesgo clínico individual.
+                    {/* 🔹 Barra visual de probabilidad */}
+                    <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${Math.min(
+                            Math.max(probabilityRef * 100, 0),
+                            100
+                          ).toFixed(1)}%`,
+                          backgroundColor: KMC_BLUE,
+                        }}
+                      />
+                    </div>
+                    <p className="text-[10px] text-slate-500">
+                      El tramo sombreado representa la proporción de probabilidad
+                      asignada por el modelo a la clase REF.
                     </p>
                   </div>
                 )}
@@ -236,7 +282,8 @@ export default function Inferencia() {
         {/* EJEMPLO DE ARCHIVO */}
         <section className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 space-y-3">
           <h2 className="text-sm font-semibold text-slate-900">
-            Ejemplo de archivo <code className="bg-slate-100 px-1 rounded">.txt</code>
+            Ejemplo de archivo{" "}
+            <code className="bg-slate-100 px-1 rounded text-[11px]">.txt</code>
           </h2>
 
           <p className="text-xs text-slate-600">
