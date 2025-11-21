@@ -77,18 +77,61 @@ RADIOMICS_FEATURES: List[str] = [
 ##### NUEVO
 def extract_radiomics_from_nii(nii_path: str, mask_path: str) -> Dict[str, float]:
     """
-    PLANTILLA:
-    Esta función será reemplazada con el pipeline real de William.
-    Debería:
-      - Cargar la imagen T1 (.nii / .nii.gz) y la máscara,
-      - Calcular las 42 características definidas en RADIOMICS_FEATURES,
-      - Devolver un dict {nombre_feature: valor_float}.
+    Extrae las 42 características radiómicas definidas en RADIOMICS_FEATURES
+    a partir de una imagen T1 (.nii / .nii.gz) y su máscara binaria,
+    utilizando PyRadiomics.
 
-    Por ahora, devuelve todas las features en 0.0 SOLO para probar el flujo
-    end-to-end sin romper nada.
+    Parámetros
+    ----------
+    nii_path : str
+        Ruta al volumen T1 estructural en formato NIfTI.
+    mask_path : str
+        Ruta al volumen de máscara binaria (0/1) en formato NIfTI.
+
+    Retorna
+    -------
+    Dict[str, float]
+        Diccionario {nombre_feature: valor_float} sólo con las 42 features
+        que espera el modelo de ElasticNet.
     """
-    features: Dict[str, float] = {feat: 0.0 for feat in RADIOMICS_FEATURES}
+
+    # 1. Crear extractor radiomics (puedes ajustar parámetros con un YAML si lo desean)
+    extractor = featureextractor.RadiomicsFeatureExtractor()
+
+    # Opcional: puedes desactivar features que no uses, pero como luego filtramos
+    # por RADIOMICS_FEATURES, no es estrictamente necesario.
+
+    # 2. Ejecutar extracción sobre imagen + máscara
+    result = extractor.execute(nii_path, mask_path)
+    # result es un dict con muchas claves:
+    # - diagnostics_...
+    # - original_firstorder_...
+    # - original_glcm_...
+    # etc.
+
+    # 3. Filtrar sólo las 42 features que usa el clasificador
+    features: Dict[str, float] = {}
+    missing = []
+
+    for feat in RADIOMICS_FEATURES:
+        if feat not in result:
+            missing.append(feat)
+        else:
+            try:
+                features[feat] = float(result[feat])
+            except Exception:
+                # Si hay algún problema de casteo, lo registramos como missing
+                missing.append(feat)
+
+    if missing:
+        # Aquí puedes elegir: o lanzar error duro, o loggear y seguir.
+        # Para el proyecto de grado prefiero ser explícito.
+        raise RuntimeError(
+            f"Faltan {len(missing)} características radiomics en el resultado de PyRadiomics: {missing}"
+        )
+
     return features
+
 
 
 def parse_kv_text(text: str) -> Dict[str, str]:
