@@ -111,18 +111,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* REF */}
-            <div className="space-y-1">
-              <div className="flex items-baseline justify-between">
-                <span className="text-xs font-medium text-slate-700">REF</span>
-                <span className="text-xs text-slate-500">0%</span>
-              </div>
-              <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
-                <div className="h-full rounded-full bg-slate-300" style={{ width: "0%" }} />
-              </div>
-            </div>
-          </div>
-
           <p className="text-[11px] text-slate-500 leading-relaxed">
             En el informe escrito se documenta la composición de cada submuestra (MRI T1,
             FreeSurfer, radiomics y pruebas neuropsicológicas), así como los criterios de inclusión
