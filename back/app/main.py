@@ -5,6 +5,13 @@ import numpy as np
 import os
 import joblib
 import tempfile # NUEVO 
+from radiomics import featureextractor  # <-- NUEVO
+
+# Limitar número de threads de librerías numéricas (útil en servidores)
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+
 
 app = FastAPI(title="KMC Inference API (Radiomics)")
 
