@@ -69,55 +69,56 @@ export default function Home() {
             </span>
           </div>
         </section>
-
         {/* 🔹 Distribución de la cohorte por grupo (ejemplo radiomics T1) */}
-        <section className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 space-y-4">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-sm font-semibold text-slate-900">
-              Distribución por grupo · submuestra radiomics T1
-            </h2>
-            <p className="text-xs text-slate-600 max-w-3xl">
-              Esta visualización resume la proporción de participantes MMC y control en la
-              submuestra utilizada para el modelo radiomics T1 (83 MMC y 68 controles). La
-              distribución exacta puede variar entre los distintos análisis del pipeline
-              (FreeSurfer, clustering y pruebas neuropsicológicas).
-            </p>
-          </div>
+<section className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 space-y-4">
+  <div className="flex flex-col gap-1">
+    <h2 className="text-sm font-semibold text-slate-900">
+      Distribución por grupo · submuestra radiomics T1
+    </h2>
+    <p className="text-xs text-slate-600 max-w-3xl">
+      Esta visualización resume la proporción de participantes MMC y control en la
+      submuestra utilizada para el modelo radiomics T1 (83 MMC y 68 controles). La
+      distribución exacta puede variar entre los distintos análisis del pipeline
+      (FreeSurfer, clustering y pruebas neuropsicológicas).
+    </p>
+  </div>
 
-          {/* Barras horizontales tipo "gráfico" simple */}
-          <div className="space-y-3 mt-2">
-            {/* MMC */}
-            <div className="space-y-1">
-              <div className="flex items-baseline justify-between">
-                <span className="text-xs font-medium text-slate-700">MMC</span>
-                <span className="text-xs text-slate-500">55%</span>
-              </div>
-              <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
-                <div
-                  className="h-full rounded-full"
-                  style={{ width: "55%", backgroundColor: KMC_BLUE }}
-                />
-              </div>
-            </div>
+  {/* Barras horizontales tipo "gráfico" simple */}
+  <div className="space-y-3 mt-2">
+    {/* MMC */}
+    <div className="space-y-1">
+      <div className="flex items-baseline justify-between">
+        <span className="text-xs font-medium text-slate-700">MMC</span>
+        <span className="text-xs text-slate-500">55%</span>
+      </div>
+      <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
+        <div
+          className="h-full rounded-full"
+          style={{ width: "55%", backgroundColor: KMC_BLUE }}
+        />
+      </div>
+    </div>
 
-            {/* Control */}
-            <div className="space-y-1">
-              <div className="flex items-baseline justify-between">
-                <span className="text-xs font-medium text-slate-700">Control</span>
-                <span className="text-xs text-slate-500">45%</span>
-              </div>
-              <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
-                <div className="h-full rounded-full bg-slate-400" style={{ width: "45%" }} />
-              </div>
-            </div>
+    {/* Control */}
+    <div className="space-y-1">
+      <div className="flex items-baseline justify-between">
+        <span className="text-xs font-medium text-slate-700">Control</span>
+        <span className="text-xs text-slate-500">45%</span>
+      </div>
+      <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
+        <div className="h-full rounded-full bg-slate-400" style={{ width: "45%" }} />
+      </div>
+    </div>
+  </div>
 
-          <p className="text-[11px] text-slate-500 leading-relaxed">
-            En el informe escrito se documenta la composición de cada submuestra (MRI T1,
-            FreeSurfer, radiomics y pruebas neuropsicológicas), así como los criterios de inclusión
-            y las diferencias entre participantes MMC y controles.
-          </p>
-        </section>
+  <p className="text-[11px] text-slate-500 leading-relaxed">
+    En el informe escrito se documenta la composición de cada submuestra (MRI T1,
+    FreeSurfer, radiomics y pruebas neuropsicológicas), así como los criterios de inclusión
+    y las diferencias entre participantes MMC y controles.
+  </p>
+</section>
 
+        
         {/* 🔹 Clustering exploratorio en cuerpo calloso (FreeSurfer / slices) */}
         <section className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6 space-y-5">
           <div className="flex flex-col gap-1">
