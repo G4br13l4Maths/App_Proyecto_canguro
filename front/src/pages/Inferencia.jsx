@@ -1,13 +1,12 @@
 import { useState } from "react";
 
-const KMC_BLUE = "#2e75b6"; // Color institucional
+const KMC_BLUE = "#2e75b6"; // Color institucional Fundación Canguro
 
 function formatPredictedLabel(raw) {
   if (!raw) return "N/A";
 
   if (raw === "REF") return "Control / referencia (clase modelo)";
-  if (raw === "MMC_or_Control")
-    return "MMC o Control (clase modelo: no-REF)";
+  if (raw === "MMC_or_Control") return "MMC o Control (clase modelo: no-REF)";
 
   return raw;
 }
@@ -60,7 +59,7 @@ export default function Inferencia() {
     }
   };
 
-  // 🔹 Paso 2: descargar resultado en .json
+  // Descargar resultado en .json
   const handleDownloadJson = () => {
     if (!result) return;
     const blob = new Blob([JSON.stringify(result, null, 2)], {
@@ -78,6 +77,7 @@ export default function Inferencia() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {/* Franja superior institucional */}
       <div className="h-1.5 w-full" style={{ backgroundColor: KMC_BLUE }} />
 
       <div className="max-w-4xl mx-auto px-4 py-10 space-y-8">
@@ -98,12 +98,15 @@ export default function Inferencia() {
           </h1>
 
           <p className="text-sm md:text-[15px] text-slate-600 max-w-3xl leading-relaxed">
-            Este módulo permite cargar un archivo con las{" "}
-            <strong>42 características radiómicas pre-calculadas</strong> del
-            paciente, derivadas de la imagen T1 mediante el pipeline del
-            proyecto. La predicción generada es estrictamente experimental y
-            debe interpretarse exclusivamente en el contexto académico del
-            estudio.
+            Este módulo implementa la interfaz de inferencia del{" "}
+            <span className="font-semibold">
+              clasificador radiomics T1 basado en Elastic Net
+            </span>{" "}
+            desarrollado en el proyecto. A partir de un archivo de texto con las
+            42 características cuantitativas extraídas de una imagen T1, el
+            sistema aplica el modelo supervisado y presenta la salida de manera
+            estandarizada para facilitar su interpretación en el contexto del
+            seguimiento a 20 años del Método Madre Canguro.
           </p>
         </header>
 
@@ -114,15 +117,18 @@ export default function Inferencia() {
           </h2>
 
           <p className="text-xs text-slate-600">
-            El archivo debe contener 42 variables en formato{" "}
+            El archivo de entrada corresponde a{" "}
+            <span className="font-semibold">un solo participante</span> y debe
+            contener exactamente 42 líneas en formato{" "}
             <code className="bg-slate-100 px-1 rounded text-[11px]">
               clave=valor
             </code>{" "}
-            por línea (por ejemplo:{" "}
+            (por ejemplo:{" "}
             <code className="bg-slate-100 px-1 rounded text-[11px]">
               original_firstorder_Entropy=3.41
             </code>
-            ).
+            ), utilizando los nombres de las variables radiómicas empleados en
+            el entrenamiento del modelo.
           </p>
 
           <form
@@ -163,6 +169,13 @@ export default function Inferencia() {
             </p>
           )}
 
+          {loading && (
+            <p className="text-[11px] text-slate-500">
+              El servidor está leyendo el archivo, construyendo el vector de 42
+              descriptores radiómicos y aplicando el clasificador supervisado.
+            </p>
+          )}
+
           {error && (
             <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
               <strong>Error:</strong> {error}
@@ -176,7 +189,7 @@ export default function Inferencia() {
             {/* Título + botón de descarga JSON */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <h2 className="text-sm font-semibold text-slate-900">
-                2. Resultado de la inferencia
+                2. Resultado de la inferencia del modelo radiomics T1
               </h2>
 
               <button
@@ -215,7 +228,7 @@ export default function Inferencia() {
                       {(probabilityRef * 100).toFixed(1)}%
                     </p>
 
-                    {/* 🔹 Barra visual de probabilidad */}
+                    {/* Barra visual de probabilidad */}
                     <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
                       <div
                         className="h-full rounded-full"
@@ -229,8 +242,10 @@ export default function Inferencia() {
                       />
                     </div>
                     <p className="text-[10px] text-slate-500">
-                      El tramo sombreado representa la proporción de probabilidad
-                      asignada por el modelo a la clase REF.
+                      El tramo sombreado representa la probabilidad asignada por
+                      el modelo a la clase de referencia (REF) definida durante
+                      el entrenamiento (participantes manejados con cuidado
+                      convencional o de referencia).
                     </p>
                   </div>
                 )}
@@ -251,30 +266,46 @@ export default function Inferencia() {
 
                 <ul className="list-disc list-inside space-y-1">
                   <li>
-                    El modelo se entrenó con un subconjunto específico del
-                    estudio de 20 años del Método Madre Canguro.
+                    El clasificador corresponde a un modelo de regresión
+                    logística con penalización Elastic Net, entrenado sobre una
+                    submuestra del seguimiento a 20 años del Método Madre
+                    Canguro.
                   </li>
                   <li>
-                    La predicción se basa en 42 características radiómicas
-                    cuantitativas extraídas de la imagen T1.
+                    La predicción sintetiza información distribuida en{" "}
+                    <span className="font-semibold">
+                      42 descriptores radiómicos cuantitativos
+                    </span>{" "}
+                    obtenidos con PyRadiomics a partir de la imagen T1
+                    estructural.
                   </li>
                   <li>
-                    El desempeño del modelo es moderado (AUC ≈ 0.64), por lo
-                    que su uso es exclusivamente investigativo.
+                    En la evaluación interna, el modelo alcanzó un{" "}
+                    <span className="font-semibold">
+                      desempeño de clasificación moderado (AUC ≈ 0.64 frente al
+                      clasificador aleatorio)
+                    </span>
+                    , por lo que su uso es adecuado para exploración científica,
+                    pero insuficiente para decisiones clínicas a nivel
+                    individual.
                   </li>
                   <li>
-                    No constituye diagnóstico ni apoyo clínico; cualquier
-                    decisión médica requiere evaluación profesional completa.
+                    La interpretación debe realizarse siempre en conjunto con la
+                    información clínica, neuropsicológica y de neuroimagen del
+                    participante; este resultado no constituye diagnóstico ni
+                    recomendación terapéutica.
                   </li>
                 </ul>
               </div>
             </div>
 
             <p className="text-[11px] text-slate-500 leading-relaxed">
-              Este módulo forma parte del proyecto de grado de la Maestría en
-              Inteligencia Artificial. La inferencia generada es
-              <strong> estrictamente experimental</strong> y debe analizarse
-              dentro del contexto metodológico descrito en el informe técnico.
+              Este módulo forma parte del proyecto de grado de la{" "}
+              Maestría en Inteligencia Artificial de la Universidad de los
+              Andes. La inferencia presentada es{" "}
+              <span className="font-semibold">estrictamente experimental</span>{" "}
+              y su uso debe limitarse a los análisis descritos en el informe
+              técnico y en los documentos de metodología del estudio.
             </p>
           </section>
         )}
@@ -287,8 +318,10 @@ export default function Inferencia() {
           </h2>
 
           <p className="text-xs text-slate-600">
-            El archivo debe incluir las 42 características radiómicas utilizadas
-            por el modelo (se muestran solo algunas para ilustración):
+            El archivo real se genera automáticamente a partir de la imagen T1
+            mediante el pipeline de extracción de características (PyRadiomics).
+            A continuación se ilustra el formato esperado para algunas de las
+            variables:
           </p>
 
           <pre
@@ -306,8 +339,9 @@ original_glcm_SumEntropy=4.3109
 original_glcm_SumSquares=7.3840`}</pre>
 
           <p className="text-[11px] text-slate-500">
-            Estos valores se generan automáticamente a partir de imágenes T1
-            mediante el pipeline de extracción construido en el proyecto.
+            La generación de estos archivos no está pensada para ser manual,
+            sino como parte de los pipelines de procesamiento reproducibles
+            descritos en los notebooks del proyecto.
           </p>
         </section>
       </div>
