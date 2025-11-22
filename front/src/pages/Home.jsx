@@ -13,11 +13,8 @@ export default function Home() {
             Panel de resultados · Método Madre Canguro
           </h1>
           <p className="text-sm md:text-[15px] text-slate-600 leading-relaxed max-w-3xl">
-            En esta página se resumen los principales resultados estructurales del seguimiento a
-            20 años: submuestras analizadas, comparación entre grupos (MMC vs controles) y patrones
-            identificados mediante clustering, modelos supervisados y análisis estadístico sobre
-            distintas estructuras cerebrales.
-          </p>
+  En esta página se presentan de forma sintética los principales hallazgos estructurales del seguimiento a 20 años: submuestras analizadas, comparación entre grupos (MMC vs controles) y patrones identificados mediante análisis morfométrico, clustering no supervisado, modelos supervisados y análisis estadístico sobre distintas estructuras cerebrales.
+</p>
         </section>
 
         {/* 🔹 Tarjetas de KPIs principales (valores reales por submuestra) */}
