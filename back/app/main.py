@@ -234,7 +234,7 @@ async def predict(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error de inferencia en el modelo: {e}")
 
-    predicted_class = "REF" if pred_int == 1 else "MMC_or_Control"
+    predicted_class = "MMC" if pred_int == 1 else "Control"
 
     return {
         "predicted_class": predicted_class,
