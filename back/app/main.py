@@ -203,8 +203,8 @@ def load_model():
 async def predict(file: UploadFile = File(...)):
     """
     Endpoint de inferencia:
-    - Recibe un archivo .txt con las 42 features radiomics en formato clave=valor.
-    - Devuelve clase predicha y probabilidad de REF.
+    - Recibe .txt con las 42 features radiomics.
+    - Devuelve clase predicha y probabilidad de MMC.
     """
     if not file.filename.endswith(".txt"):
         raise HTTPException(status_code=400, detail="Sube un archivo con extensión .txt")
@@ -218,19 +218,21 @@ async def predict(file: UploadFile = File(...)):
     # 1) Parsear clave=valor
     sample = parse_kv_text(content)
 
-    # 2) Vectorizar según el orden de columnas que usó el modelo
+    # 2) Vectorizar
     X = vectorize_radiomics(sample)
 
-    # 3) Cargar modelo real
+    # 3) Cargar modelo
     model = load_model()
 
     # 4) Inferencia
     try:
-        # Clases del modelo: [0, 1] donde 1 = REF (según su definición)
-        proba_ref = None
-        if hasattr(model, "predict_proba"):
-            proba_ref = float(model.predict_proba(X)[0, 1])
-        pred_int = int(model.predict(X)[0])
+        # Importante:
+        # predict_proba(X)[:, 1] SIEMPRE corresponde a label=1 = MMC
+        proba_mmc = float(model.predict_proba(X)[0, 1])
+        proba_control = 1.0 - proba_mmc
+
+        pred_int = int(model.predict(X)[0])  # 1 = MMC, 0 = Control
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error de inferencia en el modelo: {e}")
 
@@ -238,10 +240,12 @@ async def predict(file: UploadFile = File(...)):
 
     return {
         "predicted_class": predicted_class,
-        "probability_ref": round(proba_ref, 3) if proba_ref is not None else None,
+        "probability_mmc": round(proba_mmc, 3),
+        "probability_control": round(proba_control, 3),
         "raw_class_int": pred_int,
-        "model_type": "radiomics_elasticnet_logreg",
+        "model_type": "radiomics_elasticnet_logreg"
     }
+
 
 ###### NUEVO
 @app.post("/predict_from_nii")
