@@ -27,10 +27,27 @@ export default function Inferencia() {
   const apiBase = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
   // Probabilidad numérica (0–1) de la clase MMC (label 1 en el modelo)
-  const probabilityRef =
-    result && result.probability_ref != null
-      ? Number(result.probability_ref)
-      : null;
+  // const probabilityRef =
+    // result && result.probability_ref != null
+      // ? Number(result.probability_ref)
+      // : null;
+  
+    // Probabilidad numérica (0–1) y etiqueta asociada
+  let probabilityValue = null;
+  let probabilityLabel = "";
+
+  if (result) {
+    if (result.probability_ref != null) {
+      // Caso modelo antiguo: REF vs no-REF
+      probabilityValue = Number(result.probability_ref);
+      probabilityLabel = "Probabilidad (clase REF)";
+    } else if (result.probability_mmc != null) {
+      // Caso modelo nuevo: MMC vs Control
+      probabilityValue = Number(result.probability_mmc);
+      probabilityLabel = "Probabilidad (clase MMC)";
+    }
+  }
+
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -226,14 +243,12 @@ export default function Inferencia() {
                 </p>
 
                 {/* Probabilidad MMC + barra visual */}
-                {probabilityRef !== null && (
-                  <div className="space-y-1">
-                    <p className="text-sm text-slate-700">
-                      <span className="font-semibold">
-                        Probabilidad (clase MMC):
-                      </span>{" "}
-                      {(probabilityRef * 100).toFixed(1)}%
-                    </p>
+                {probabilityValue !== null && (
+  <div className="space-y-1">
+    <p className="text-sm text-slate-700">
+      <span className="font-semibold">{probabilityLabel}:</span>{" "}
+      {(probabilityValue * 100).toFixed(1)}%
+    </p>
 
                     {/* Barra visual de probabilidad */}
                     <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
@@ -241,7 +256,7 @@ export default function Inferencia() {
                         className="h-full rounded-full"
                         style={{
                           width: `${Math.min(
-                            Math.max(probabilityRef * 100, 0),
+                            Math.max(probabilityValue * 100, 0),
                             100
                           ).toFixed(1)}%`,
                           backgroundColor: KMC_BLUE,
