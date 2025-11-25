@@ -27,26 +27,13 @@ export default function Inferencia() {
   const apiBase = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
   // Probabilidad numérica (0–1) de la clase MMC (label 1 en el modelo)
-  // const probabilityRef =
-    // result && result.probability_ref != null
-      // ? Number(result.probability_ref)
-      // : null;
-  
-    // Probabilidad numérica (0–1) y etiqueta asociada
-  let probabilityValue = null;
-  let probabilityLabel = "";
+  // Probabilidad numérica (0–1) de la clase positiva (MMC o REF, según el modelo)
+// Intentamos primero probability_mmc y, si no existe, probability_ref.
+  const probability =
+  result && (result.probability_mmc ?? result.probability_ref) != null
+    ? Number(result.probability_mmc ?? result.probability_ref)
+    : null;
 
-  if (result) {
-    if (result.probability_ref != null) {
-      // Caso modelo antiguo: REF vs no-REF
-      probabilityValue = Number(result.probability_ref);
-      probabilityLabel = "Probabilidad (clase REF)";
-    } else if (result.probability_mmc != null) {
-      // Caso modelo nuevo: MMC vs Control
-      probabilityValue = Number(result.probability_mmc);
-      probabilityLabel = "Probabilidad (clase MMC)";
-    }
-  }
 
 
   const onSubmit = async (e) => {
@@ -242,35 +229,37 @@ export default function Inferencia() {
                   </span>
                 </p>
 
-                {/* Probabilidad MMC + barra visual */}
-                {probabilityValue !== null && (
+                {/* Probabilidad + barra visual */}
+{probability !== null && (
   <div className="space-y-1">
     <p className="text-sm text-slate-700">
-      <span className="font-semibold">{probabilityLabel}:</span>{" "}
-      {(probabilityValue * 100).toFixed(1)}%
+      <span className="font-semibold">
+        Probabilidad (clase MMC):
+      </span>{" "}
+      {(probability * 100).toFixed(1)}%
     </p>
 
-                    {/* Barra visual de probabilidad */}
-                    <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
-                      <div
-                        className="h-full rounded-full"
-                        style={{
-                          width: `${Math.min(
-                            Math.max(probabilityValue * 100, 0),
-                            100
-                          ).toFixed(1)}%`,
-                          backgroundColor: KMC_BLUE,
-                        }}
-                      />
-                    </div>
-                    <p className="text-[10px] text-slate-500">
-                      El tramo sombreado representa la probabilidad asignada por
-                      el modelo a la clase MMC (participantes manejados con
-                      Método Madre Canguro) frente a la clase Control (cuidado
-                      convencional).
-                    </p>
-                  </div>
-                )}
+    {/* Barra visual de probabilidad */}
+    <div className="h-3 w-full rounded-full bg-slate-100 overflow-hidden">
+      <div
+        className="h-full rounded-full"
+        style={{
+          width: `${Math.min(
+            Math.max(probability * 100, 0),
+            100
+          ).toFixed(1)}%`,
+          backgroundColor: KMC_BLUE,
+        }}
+      />
+    </div>
+
+    <p className="text-[10px] text-slate-500">
+      El tramo sombreado representa la probabilidad asignada por el modelo
+      a la clase positiva (MMC en el modelo MMC vs Control, o REF en el
+      modelo REF vs no-REF, según el caso de entrenamiento).
+    </p>
+  </div>
+)}
 
                 <p className="text-[11px] text-slate-500">
                   <strong>Modelo:</strong>{" "}
