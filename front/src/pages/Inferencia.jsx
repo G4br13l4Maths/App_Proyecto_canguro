@@ -27,9 +27,9 @@ export default function Inferencia() {
   const apiBase = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
   // Probabilidad numérica (0–1) de la clase MMC (label 1 en el modelo)
-  const probabilityref =
-    result && result.probability_ref != null
-      ? Number(result.probability_ref)
+  const probabilityMmc =
+    result && result.probability_mmc != null
+      ? Number(result.probability_mmc)
       : null;
 
   const onSubmit = async (e) => {
@@ -226,13 +226,13 @@ export default function Inferencia() {
                 </p>
 
                 {/* Probabilidad MMC + barra visual */}
-                {probabilityRef !== null && (
+                {probabilityMmc !== null && (
                   <div className="space-y-1">
                     <p className="text-sm text-slate-700">
                       <span className="font-semibold">
                         Probabilidad (clase MMC):
                       </span>{" "}
-                      {(probabilityRef * 100).toFixed(1)}%
+                      {(probabilityMmc * 100).toFixed(1)}%
                     </p>
 
                     {/* Barra visual de probabilidad */}
@@ -241,7 +241,7 @@ export default function Inferencia() {
                         className="h-full rounded-full"
                         style={{
                           width: `${Math.min(
-                            Math.max(probabilityRef * 100, 0),
+                            Math.max(probabilityMmc * 100, 0),
                             100
                           ).toFixed(1)}%`,
                           backgroundColor: KMC_BLUE,
