@@ -18,7 +18,6 @@ function formatPredictedLabel(raw) {
   return raw;
 }
 
-
 export default function Inferencia() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -27,7 +26,7 @@ export default function Inferencia() {
 
   const apiBase = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
-  // Probabilidad numérica (0–1) de la clase REF, si existe
+  // Probabilidad numérica (0–1) de la clase MMC (label 1 en el modelo)
   const probabilityMmc =
     result && result.probability_mmc != null
       ? Number(result.probability_mmc)
@@ -226,14 +225,14 @@ export default function Inferencia() {
                   </span>
                 </p>
 
-                {/* Probabilidad REF + barra visual */}
-                {probabilityRef !== null && (
+                {/* Probabilidad MMC + barra visual */}
+                {probabilityMmc !== null && (
                   <div className="space-y-1">
                     <p className="text-sm text-slate-700">
                       <span className="font-semibold">
-                        Probabilidad (clase REF):
+                        Probabilidad (clase MMC):
                       </span>{" "}
-                      {(probabilityRef * 100).toFixed(1)}%
+                      {(probabilityMmc * 100).toFixed(1)}%
                     </p>
 
                     {/* Barra visual de probabilidad */}
@@ -242,7 +241,7 @@ export default function Inferencia() {
                         className="h-full rounded-full"
                         style={{
                           width: `${Math.min(
-                            Math.max(probabilityRef * 100, 0),
+                            Math.max(probabilityMmc * 100, 0),
                             100
                           ).toFixed(1)}%`,
                           backgroundColor: KMC_BLUE,
@@ -251,9 +250,9 @@ export default function Inferencia() {
                     </div>
                     <p className="text-[10px] text-slate-500">
                       El tramo sombreado representa la probabilidad asignada por
-                      el modelo a la clase de referencia (REF) definida durante
-                      el entrenamiento (participantes manejados con cuidado
-                      convencional o de referencia).
+                      el modelo a la clase MMC (participantes manejados con
+                      Método Madre Canguro) frente a la clase Control (cuidado
+                      convencional).
                     </p>
                   </div>
                 )}
@@ -277,7 +276,7 @@ export default function Inferencia() {
                     El clasificador corresponde a un modelo de regresión
                     logística con penalización Elastic Net, entrenado sobre una
                     submuestra del seguimiento a 20 años del Método Madre
-                    Canguro.
+                    Canguro (MMC vs Control).
                   </li>
                   <li>
                     La predicción sintetiza información distribuida en{" "}
@@ -308,9 +307,9 @@ export default function Inferencia() {
             </div>
 
             <p className="text-[11px] text-slate-500 leading-relaxed">
-              Este módulo forma parte del proyecto de grado de la{" "}
-              Maestría en Inteligencia Artificial de la Universidad de los
-              Andes. La inferencia presentada es{" "}
+              Este módulo forma parte del proyecto de grado de la Maestría en
+              Inteligencia Artificial de la Universidad de los Andes. La
+              inferencia presentada es{" "}
               <span className="font-semibold">estrictamente experimental</span>{" "}
               y su uso debe limitarse a los análisis descritos en el informe
               técnico y en los documentos de metodología del estudio.
