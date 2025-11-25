@@ -5,11 +5,19 @@ const KMC_BLUE = "#2e75b6"; // Color institucional Fundación Canguro
 function formatPredictedLabel(raw) {
   if (!raw) return "N/A";
 
-  if (raw === "REF") return "Control / referencia (clase modelo)";
-  if (raw === "MMC_or_Control") return "MMC o Control (clase modelo: no-REF)";
+  const value = raw.toString().toUpperCase();
+
+  if (value === "MMC") {
+    return "MMC (Método Madre Canguro)";
+  }
+
+  if (value === "CONTROL") {
+    return "Control (cuidado convencional)";
+  }
 
   return raw;
 }
+
 
 export default function Inferencia() {
   const [file, setFile] = useState(null);
@@ -20,9 +28,9 @@ export default function Inferencia() {
   const apiBase = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
 
   // Probabilidad numérica (0–1) de la clase REF, si existe
-  const probabilityRef =
-    result && result.probability_ref != null
-      ? Number(result.probability_ref)
+  const probabilityMmc =
+    result && result.probability_mmc != null
+      ? Number(result.probability_mmc)
       : null;
 
   const onSubmit = async (e) => {
